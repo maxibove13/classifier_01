@@ -4,7 +4,7 @@ Implementation of a classifier using the [Animals-10](https://www.kaggle.com/ale
 
 Best results so far using `resnet18`:
 
-[Loss and accuracy](https://github.com/maxibove13/classifier_01/blob/main/figures/loss_acc_evol.png?raw=true)
+![Loss and accuracy](https://github.com/maxibove13/classifier_01/blob/main/figures/loss_acc_evol.png?raw=true)
 
 ## Instructions
 

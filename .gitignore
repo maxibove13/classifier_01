@@ -7,6 +7,10 @@ data
 # Ignore test
 test.py
 *.pyc
+*.swp
+
+# Ignore models
+models
 
 # Ignore notebooks
 *.ipynb

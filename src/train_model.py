@@ -107,7 +107,8 @@ def train_model(model_name, learning_rate, batch_size, num_epochs, num_workers, 
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    # optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    optimizer = 
 
     # Training loop
     print(f"Starting training: \n")
@@ -183,10 +184,11 @@ def train_model(model_name, learning_rate, batch_size, num_epochs, num_workers, 
             )
         
         # Save model at the end of each epoch
-        torch.save({
-            "state_dict": model.state_dict(),
-            "optimizer": optim.state_dict()
-        }, os.path.join(config['models']['rootdir'], config['models']['name']))
+        if config['model']['save']:
+            torch.save({
+                "state_dict": model.state_dict(),
+                "optimizer": optimizer.state_dict()
+            }, os.path.join(config['models']['rootdir'], config['models']['name']))
 
 def check_accuracy(loader, model, device):
     num_correct = 0

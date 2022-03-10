@@ -1,0 +1,15 @@
+# Ignore venv
+.venv_animal
+
+#ignore data
+data
+
+# Ignore test
+test.py
+*.pyc
+
+# Ignore notebooks
+*.ipynb
+
+# Ignore config.yaml
+config.yaml

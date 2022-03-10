@@ -1,0 +1,9 @@
+albumentations
+ipykernel
+matplotlib
+jupyter
+torch
+torchvision
+pandas
+pyyaml
+scikit-learn

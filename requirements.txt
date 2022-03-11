@@ -6,8 +6,8 @@ ipykernel
 matplotlib
 jupyter
 split-folders
-torch+cpu
-torchvision+cpu
+torch==1.11.0+cpu
+torchvision==0.12.0+cpu
 pandas
 pyyaml
 requests

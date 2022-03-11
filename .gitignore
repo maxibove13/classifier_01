@@ -27,3 +27,4 @@ figures
 
 # Except loss and accuracy figure
 !figures/loss_acc_evol.png
+!test.py

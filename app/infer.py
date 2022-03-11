@@ -78,15 +78,6 @@ def infer(model_name, num_samples):
         # print(i,classes[data.samples[i][1]])
         image.save(image_fn)
 
-    # # Load processed samples
-    # processed_image_path = os.path.join(
-    #     config['data']['rootdir'],
-    #     'processed',
-    #     config['data']['dataset'],
-    #     'test',
-    #     'images'
-    #     )
-
      # Initialize model
     model = initialize_model(model_name, device)
     optimizer = torch.optim.SGD(model.parameters(), lr=config['train']['learning_rate'],

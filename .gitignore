@@ -22,7 +22,7 @@ figures
 *.ipynb
 
 # Ignore config.yaml
-config.yaml
+# config.yaml
 
 
 # Except loss and accuracy figure

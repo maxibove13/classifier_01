@@ -69,4 +69,20 @@ heroku login -i
 heroku create animal-classifier
 ```
 
-3. 
+3. Test heroku locally
+
+```
+heroku local
+```
+
+4. Associate heroku app with git repository
+
+```
+heroku git:remote -a animal_classifier01
+```
+
+5. Push to heroku
+
+```
+git push heroku main
+```

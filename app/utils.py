@@ -24,7 +24,7 @@ from skimage import io
 import yaml
 
 # Local modules
-from models import models
+from app.models import models
 
 # read yaml file
 with open('config.yaml') as file:

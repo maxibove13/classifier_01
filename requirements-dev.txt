@@ -1,4 +1,3 @@
--f https://download.pytorch.org/whl/torch_stable.html
 albumentations
 flask
 gunicorn
@@ -6,8 +5,8 @@ ipykernel
 matplotlib
 jupyter
 split-folders
-torch+cpu
-torchvision+cpu
+torch
+torchvision
 pandas
 pyyaml
 requests

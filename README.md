@@ -8,6 +8,12 @@ Best results so far using `resnet18`:
 
 ## Instructions
 
+0. Install necessary modules with `pip`:
+
+```
+pip install -r requirements-dev.txt
+```
+
 1. Run `split_data.py` to split the processed dataset in 80% for training, 10% for validation and 10% for final testing. You can change the ratios as you wish.
 ```
 python3 ./src/split_data.py --ratio 0.8 0.1 0.1
@@ -48,3 +54,19 @@ python3 ./src/test_model.py --model <model> --set <set>
 4. Inference
 
 Make predictions on new images using `infer.py` script.
+
+## Deploy using Heroku
+
+1. Login with
+
+```
+heroku login -i
+```
+
+2. Create heroku app
+
+```
+heroku create animal-classifier
+```
+
+3. 

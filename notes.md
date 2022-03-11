@@ -8,6 +8,8 @@
 
 - Why not just resize the image with transform without cropping?
 
+- Create two branches, main and deploy
+
 ### Issues
 
 - When resizing and croping image in order for them to be squared and the same size, sometimes the animal dissapear. It would be good to explore centering the image, admitting different size images or something else.

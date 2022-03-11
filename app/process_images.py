@@ -19,7 +19,7 @@ import pandas as pd
 import yaml
 
 # Local modules
-from utils import create_csv
+from app.utils import create_csv
 
 # read yaml file
 with open('config.yaml') as file:

@@ -1,22 +1,12 @@
 ### To do
 
-- each epoch has a training and validation phase
-
-- Test different models with model dispatcher.
-
 - Test centering images
 
 - resnet50 pretrained with an additional Dense layer
 
-- reorganize dataset separated with categories?
-
 - When your model saturate with Adam, turn to SGD at a smaller learning rate
 
-- dataset.transforms and change them?
-
-- Apply cross validation
-
-- Test KNN? Most basic way to memorize all training set. It is fast in training and slow in testing, its not okay.
+- Why not just resize the image with transform without cropping?
 
 ### Issues
 
@@ -37,7 +27,3 @@
 - How to split training, validation and testing sets. Usage of library to split folders.
 
 - How to save mean and std values? use the same as for training when infering?
-
-### Comment
-
-The normalization boosted the accuracy a bit.

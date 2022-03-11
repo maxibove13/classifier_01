@@ -65,7 +65,7 @@ def resize_images(size, set, multiprocess=True):
         
 def process_image(category_dir, im, size, idx_cat, idx_im, data_dir, images_per_category, set):
     image_path = os.path.join(data_dir, category_dir,im)
-    image = resize_image(image_path)
+    image = resize_image(image_path, size)
     image_fn = os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'], set,'images',f"animals_{idx_im}_{idx_cat}.png")
     print(f"Saving processed {idx_im}/{len(images_per_category)} {category_dir} image in: {image_fn}")
     # Save image

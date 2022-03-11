@@ -18,9 +18,9 @@ python3 ./src/split_data.py --ratio 0.8 0.1 0.1
 ```
 python3 ./src/process_images.py --size 256 --set train
 python3 ./src/process_images.py --size 256 --set val
+python3 ./src/process_images.py --size 256 --set test
 ```
 
-We will process the `test` set later on, as this set will not be used until the model is trained and validated.
 
 
 2. Run 
@@ -36,3 +36,15 @@ python3 ./src/train_model.py --model <model>  > ./logs/<log_file> &
 ```
 
 Where <model> could be either a simple `cnn` or `resnet18` loaded from `torchvision`
+
+3. Test model
+
+Run `test_model.py` to test the model in `train`, `val` or `test` sets
+
+```
+python3 ./src/test_model.py --model <model> --set <set>
+```
+
+4. Inference
+
+Make predictions on new images using `infer.py` script.

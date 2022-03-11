@@ -19,14 +19,13 @@ from torch import nn, optim
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 from torchvision.models import googlenet
-from torch.utils.data import random_split, DataLoader
+from torch.utils.data import random_split, DataLoader, sampler
 import torchvision.transforms as transforms
 import pandas as pd
 import yaml
 
 # Local modules
-from utils import ImageDataset
-from models import CNN, models
+from utils import ImageDataset, get_mean_std, initialize_model, categories
 
 # read yaml file
 with open('config.yaml') as file:
@@ -36,9 +35,8 @@ learning_rate = config['train']['learning_rate']
 num_epochs = config['train']['num_epochs']
 batch_size = config['train']['batch_size']
 num_workers = config['train']['num_workers']
-split = config['train']['split']
 
-def train_model(model_name, learning_rate, batch_size, num_epochs, num_workers, split):
+def train_model(model_name, learning_rate, batch_size, num_epochs, num_workers):
 
     # Define device
     device = torch.device(config['train']['device']) if torch.cuda.is_available() else 'cpu'
@@ -47,28 +45,21 @@ def train_model(model_name, learning_rate, batch_size, num_epochs, num_workers, 
         f" with {torch.cuda.get_device_properties(0).total_memory/1024/1024/1024:.0f} GiB")
 
 
-    # Define dataset
-    dataset = ImageDataset(
+    # Define training dataset
+    train_dataset = ImageDataset(
         csv_file = 'annotations.csv', 
-        root_dir = os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset']),
+        root_dir = os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'], 'train'),
         transform = transforms.ToTensor()
         )
-    print(f"Defining dataset {config['data']['dataset']} with {len(dataset)} samples")
+    print(f"Defining training dataset {config['data']['dataset']} with {len(train_dataset)} samples")
 
 
     # Calculate dataset mean and std
-    print("Calculating mean and std of dataset...")
-    # Load dataset
-    train_loader = DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
-    channels_sum, channel_squared_sum, num_batches = 0, 0, 0
-    for num_batches, (data, _) in enumerate(train_loader):
-        channels_sum += torch.mean(data, dim=[0, 2, 3])
-        channel_squared_sum += torch.mean(data**2, dim=[0, 2, 3])
-
-    train_mean = channels_sum / num_batches
-    train_std = (channel_squared_sum / num_batches - train_mean ** 2) ** 0.5
-
-
+    print("Calculating mean and std of training dataset...")
+    train_mean, train_std = get_mean_std(train_dataset, batch_size, num_workers)
+    train_mean = train_mean
+    train_std = train_std
+    print(f"mean: {train_mean}, std: {train_std}")
 
     # Define transforms
     trans = transforms.Compose([
@@ -78,43 +69,53 @@ def train_model(model_name, learning_rate, batch_size, num_epochs, num_workers, 
         transforms.Normalize(mean=train_mean, std=train_std)
     ])
 
-
-    # Create dataset with new transforms
-    print("Applying transforms...")
-    dataset = ImageDataset(
+    # Define validation dataset
+    val_dataset = ImageDataset(
         csv_file = 'annotations.csv', 
-        root_dir = os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset']),
+        root_dir = os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'], 'val'),
         transform = trans
         )
 
-    # Divide training and testing dataset
-    train_set, test_set = random_split(dataset, [int(float(split)*len(dataset)), len(dataset) - int(float(split)*len(dataset))])
-    print(
-        f"Training / Testing split: {split}\n"
-        f"Training {len(train_set)} and testing {len(test_set)} samples. ")
+    test_indices = list(range(len(val_dataset)))
+    np.random.shuffle(test_indices)
+    test_idx = test_indices[:]
+    test_sampler = sampler.SubsetRandomSampler(test_idx)
+    print(f"Defining validation dataset {config['data']['dataset']} with {len(test_sampler)} samples")
+
+    # Recreate train_dataset dataset with new transforms
+    print("Applying transforms...")
+    train_dataset = ImageDataset(
+        csv_file = 'annotations.csv', 
+        root_dir = os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'], 'train'),
+        transform = trans
+        )
+    train_indices = list(range(len(train_dataset)))
+    np.random.shuffle(train_indices)
+    train_idx = train_indices[:]
+    train_sampler = sampler.SubsetRandomSampler(train_idx)
+
+
 
     # Load data
     print("Loading data...")
-    train_loader = DataLoader(dataset=train_set, batch_size=batch_size, shuffle=True, num_workers=num_workers)
-    test_loader = DataLoader(dataset=test_set, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    train_loader = DataLoader(dataset=train_dataset, sampler=train_sampler, batch_size=batch_size, num_workers=num_workers)
+    val_loader = DataLoader(dataset=val_dataset, sampler=test_sampler, batch_size=batch_size, num_workers=num_workers)
 
     # Model
-    print("Initializing model...")
-    model = models[model_name]
-    if model_name == 'resnet18':
-        model.fc = nn.Linear(512, 10)
-    model.to(device)
+    model = initialize_model(model_name, device)
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
     # optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-    optimizer = 
+    # Stochastic Gradient Descent
+    optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate,
+                      momentum=0.9, weight_decay=5e-4)
 
     # Training loop
     print(f"Starting training: \n")
     print(
         f"  Model: {model_name}\n"
-        f"  Training samples: {len(train_set)}\n"
+        f"  Training samples: {len(train_sampler)}\n"
         f"  Number of epochs: {num_epochs}\n"
         f"  Mini batch size: {batch_size}\n"
         f"  Number of batches: {len(train_loader)}\n"
@@ -131,7 +132,7 @@ def train_model(model_name, learning_rate, batch_size, num_epochs, num_workers, 
     axs[1].grid()
 
     accs_train = []
-    accs_test = []
+    accs_val = []
     losses = []
     for epoch in range(num_epochs):
         for idx, (data, targets) in enumerate(train_loader):
@@ -154,21 +155,28 @@ def train_model(model_name, learning_rate, batch_size, num_epochs, num_workers, 
                 print(f" GPU memory usage: {torch.cuda.memory_allocated(device=1)/1024/1024:.2f} MiB")
         
             running_loss += loss.item() * batch_size
-            del loss
         # Calculate average loss per image in the epoch and append it to list of losses
-        epoch_loss = running_loss / len(train_set)
+        epoch_loss = running_loss / len(train_dataset)
         losses.append(epoch_loss)
-        # Print progress every epoch
+        del loss
 
+        # Save model at the end of each epoch
+        if config['models']['save']:
+            torch.save({
+                "state_dict": model.state_dict(),
+                "optimizer": optimizer.state_dict()
+            }, os.path.join(config['models']['rootdir'], config['models']['name']))
 
-        # Calculate training and testing accuracy and append it to list of accuracies
+        # Calculate training and validation accuracy and append it to list of accuracies
+        model.eval()
         accs_train.append(check_accuracy(train_loader, model, device))
-        accs_test.append(check_accuracy(test_loader, model, device))
+        accs_val.append(check_accuracy(val_loader, model, device))
+        model.train()
 
         x = np.arange(0, epoch+1)
         axs[0].plot(x, losses, 'b', label='Training loss')
         axs[1].plot(x, accs_train, 'r', label='Training accuracy')
-        axs[1].plot(x, accs_test, 'b', label='Testing accuracy')
+        axs[1].plot(x, accs_val, 'b', label='Validation accuracy')
         if epoch == 0:
             axs[0].legend(loc='upper right')
             axs[1].legend(loc='lower right')
@@ -180,37 +188,27 @@ def train_model(model_name, learning_rate, batch_size, num_epochs, num_workers, 
             f"Epoch [{epoch+1:03d}/{num_epochs} - "
             f"Loss: {epoch_loss:.4f}] - "
             f"Train Acc: {accs_train[-1]:.2f} - "
-            f"Test Acc: {accs_test[-1]:.2f}"
+            f"Val Acc: {accs_val[-1]:.2f}"
             )
         
-        # Save model at the end of each epoch
-        if config['model']['save']:
-            torch.save({
-                "state_dict": model.state_dict(),
-                "optimizer": optimizer.state_dict()
-            }, os.path.join(config['models']['rootdir'], config['models']['name']))
 
 def check_accuracy(loader, model, device):
     num_correct = 0
     num_samples = 0
-    model.eval()
     
     with torch.no_grad():
-        for x, y in loader:
+        for ind, (x, y) in enumerate(loader):
             x = x.to(device=device)
             y = y.to(device=device)
 
             scores = model(x)
-
-            _, predictions = scores.max(1)
+            _, predictions = torch.max(scores, 1)
+            # print("in:",predictions)
             num_correct += (predictions == y).sum()
             num_samples += predictions.size(0)
         
         acc = float(num_correct)/float(num_samples)
 
-        # print(f"Got {num_correct} / {num_samples} with accuracy {acc*100:.2f}")
-
-    model.train()
     return acc
 
 
@@ -227,5 +225,4 @@ if __name__ == "__main__":
         learning_rate, 
         batch_size, 
         num_epochs, 
-        num_workers,
-        split)
+        num_workers)

@@ -9,11 +9,21 @@ test.py
 *.pyc
 *.swp
 
+# ignore logs
+logs
+
 # Ignore models
 models
+
+# Ignore figures
+figures
 
 # Ignore notebooks
 *.ipynb
 
 # Ignore config.yaml
 config.yaml
+
+
+# Except loss and accuracy figure
+!figures/loss_acc_evol.png

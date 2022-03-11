@@ -35,7 +35,7 @@ class CNN(nn.Module):
             stride=(1,1),
             padding=(1,1)
             )
-        self.fc1 = nn.Linear(16*32*32, num_classes)
+        self.fc1 = nn.Linear(16*64*64, num_classes)
         self.act = nn.ReLU()
 
     def forward(self, x):
@@ -51,5 +51,6 @@ class CNN(nn.Module):
 
 models = {
     "cnn": CNN(in_channels=3, num_classes=10),
-    "resnet18": models.resnet18(pretrained=False)
+    "resnet18": models.resnet18(pretrained=False),
+    # "resnet50": models.resnet50(pretrained=True)
 }

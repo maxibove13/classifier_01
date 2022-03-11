@@ -9,6 +9,7 @@ __status__ = "Development"
 __date__ = "03/22"
 
 # Built-in modules
+import argparse
 import os
 import multiprocessing
 
@@ -17,15 +18,16 @@ from PIL import Image
 import pandas as pd
 import yaml
 
+# Local modules
+from utils import create_csv
+
 # read yaml file
 with open('config.yaml') as file:
     config = yaml.safe_load(file)
 
-size = config['data']['size']
-
-def resize_images(size, multiprocess=True):
-    # Raw data directory
-    data_dir = os.path.join(config['data']['rootdir'], 'raw',config['data']['dataset'])
+def resize_images(size, set, multiprocess=True):
+    # Raw divided data directory
+    data_dir = os.path.join(config['data']['rootdir'], 'raw', config['data']['dataset'], set) 
     # List of categories directories
     categories_dir = os.listdir(data_dir)
 
@@ -34,8 +36,10 @@ def resize_images(size, multiprocess=True):
         os.mkdir(os.path.join(config['data']['rootdir'], 'processed'))
     if config['data']['dataset'] not in os.listdir(os.path.join(config['data']['rootdir'], 'processed')):
         os.mkdir(os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset']))
-    if 'images' not in os.listdir(os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'])):
-        os.mkdir(os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'], 'images'))
+    if set not in os.listdir(os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'])):
+        os.mkdir(os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'], set))
+    if 'images' not in os.listdir(os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'], set)):
+        os.mkdir(os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'], set,'images'))
 
     # Initialize categories and images list
     categories = []
@@ -51,33 +55,51 @@ def resize_images(size, multiprocess=True):
             pool = multiprocessing.Pool()
             for idx_im, im in enumerate(images_per_category):
                 # Define the process and target
-                pool.apply_async(process_image, args=(category_dir, im, size, idx_cat, idx_im, data_dir, images_per_category))
+                pool.apply_async(process_image, args=(category_dir, im, size, idx_cat, idx_im, data_dir, images_per_category, set))
             pool.close()
             pool.join()
         else:
             for idx_im, im in enumerate(images_per_category):
-                process_image(category_dir, im, size, idx_cat, idx_im, data_dir, images_per_category)
+                process_image(category_dir, im, size, idx_cat, idx_im, data_dir, images_per_category, set)
         
         
-def process_image(category_dir, im, size, idx_cat, idx_im, data_dir, images_per_category):
-    image = Image.open(os.path.join(data_dir, category_dir,im)) # Open image
+def process_image(category_dir, im, size, idx_cat, idx_im, data_dir, images_per_category, set):
+    image_path = os.path.join(data_dir, category_dir,im)
+    image = resize_image(image_path)
+    image_fn = os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'], set,'images',f"animals_{idx_im}_{idx_cat}.png")
+    print(f"Saving processed {idx_im}/{len(images_per_category)} {category_dir} image in: {image_fn}")
+    # Save image
+    image = image.convert('RGB') # Make sure the imae is in RGB
+    image.save(image_fn)
+
+def resize_image(image_path, size):
+    image = Image.open(image_path) # Open image
     aspect = image.size[0]/image.size[1] # Define aspect ratio
     w, h = image.size
     # Force the min dimension to be size, adjust the other one to mantain dimension
     # Crop from the top or right to reduce dimensions to (size, size)
-    size = config['data']['size']
     if w > h:
         image = image.resize((int(aspect * size),size))
         image = image.crop((0, 0, size, image.size[1]))
     else:
         image = image.resize((size, int(1/aspect * size)))
         image = image.crop((0, 0, image.size[0], size))
-
-    image_fn = os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'], 'images',f"animals_{idx_im}_{idx_cat}.png")
-    print(f"Saving processed {idx_im}/{len(images_per_category)} {category_dir} image in: {image_fn}")
-    # Save image
-    image = image.convert('RGB') # Make sure the imae is in RGB
-    image.save(image_fn)
+        
+    return image
 
 if __name__ == "__main__":
-    resize_images(size, multiprocess=True)
+     # Initialize Argument Parser
+    parser = argparse.ArgumentParser()
+    # Add arguments we want to parse
+    parser.add_argument("--size", type=int)
+    parser.add_argument("--set", type=str)
+    # Read arguments from command line
+    args = parser.parse_args()
+    # Run function to resize and crop images
+    resize_images(
+        args.size,
+        args.set,
+        multiprocess=True)
+    # Create csv with annotations
+    print(f"Creating csv file with annotations for {args.set} set")
+    create_csv(args.set)

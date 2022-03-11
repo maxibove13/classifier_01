@@ -1,9 +1,12 @@
 albumentations
+flask
 ipykernel
 matplotlib
 jupyter
+split-folders
 torch
 torchvision
 pandas
 pyyaml
+requests
 scikit-learn

@@ -1,1 +1,1 @@
-web: gunicorn wsgi:app --bind :5102
+web: gunicorn wsgi:app

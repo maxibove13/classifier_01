@@ -15,8 +15,8 @@ import random
 from flask import Flask, request, jsonify
 
 # Local modules
-from src.infer_app import transform_image, get_prediction
-from src.utils import categories
+from api.src.infer_app import transform_image, get_prediction
+from api.src.utils import categories
 
 # Instance of Flask class.
 app = Flask(__name__, static_url_path='', static_folder='') # static_url_path points to the build directory of our react project

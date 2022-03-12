@@ -11,6 +11,11 @@ __date__ = "03/22"
 # Third-party modules
 import requests
 
-resp = requests.post("https://animal-classifier01.herokuapp.com/infer", files={'file': open('./data/download.jpeg', 'rb')})
+# Heroku URL
+# https://animal-classifier01.herokuapp.com/infer
+
+
+
+resp = requests.post("http://localhost:5000/infer", files={'file': open('./data/download.jpeg', 'rb')})
 
 print(resp.text)

@@ -12,7 +12,13 @@
 
 - web interface
 
+- Train the model on new data used for inference
+
+- Create a react app without backend, just the home and make a button to infer
+
+- Different hierarchies of scripts and modules
 ### Issues
+
 
 - When resizing and croping image in order for them to be squared and the same size, sometimes the animal dissapear. It would be good to explore centering the image, admitting different size images or something else.
 

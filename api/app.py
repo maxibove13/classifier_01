@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-"""Script that defines a flask endpoint"""
+"""Run flask app and define endpoints"""
 
 __author__ = "Maximiliano Bove"
 __email__ = "maxibove13@gmail.com"
@@ -15,10 +15,11 @@ import random
 from flask import Flask, request, jsonify
 
 # Local modules
-from app.infer_app import transform_image, get_prediction
-from app.utils import categories
+from src.infer_app import transform_image, get_prediction
+from src.utils import categories
 
-app = Flask(__name__)
+# Instance of Flask class.
+app = Flask(__name__, static_url_path='', static_folder='') # static_url_path points to the build directory of our react project
 
 allowed_extensions = {'png', 'jpg', 'jpeg'}
 def allowed_file(filename):
@@ -32,8 +33,8 @@ def infer():
         if file is None or file.filename == "":
             return jsonify({'error': 'no file'})
         if not allowed_file(file.filename):
-            return jsonify({'error': 'format not supporte'})
-
+            return jsonify({'error': 'format not supported'})
+    # Make inference on image
     try:
         # Load image
         img_bytes = file.read()
@@ -41,7 +42,6 @@ def infer():
         tensor = transform_image(img_bytes, 256)
         # Make prediction
         prediction = get_prediction(tensor)
-        # print(prediction)
         # Return json data
         data = {'prediction': prediction.item(), 'class_name': categories[prediction.item()]}
         return jsonify(data)
@@ -50,5 +50,4 @@ def infer():
 
 if __name__ == "__main__":
     port = 5175
-    print(port)
     app.run(use_reloader=False, debug=True, port=port)

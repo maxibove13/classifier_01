@@ -19,8 +19,8 @@ import yaml
 from PIL import Image
 
 # Local modules
-from app.process_images import resize_image
-from app.utils import load_checkpoint, test_transform, initialize_model
+from src.process_images import resize_image
+from src.utils import load_checkpoint, test_transform, initialize_model
 
 # read yaml file
 with open('config.yaml') as file:

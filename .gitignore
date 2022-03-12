@@ -1,5 +1,5 @@
 # Ignore venv
-.venv_animal
+api/.venv_api
 
 #ignore data
 data

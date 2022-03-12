@@ -13,7 +13,19 @@ categories = ['sheep', 'cat', 'cow', 'butterfly', 'dog', 'squirrel', 'chicken', 
 
 ## Training instructions
 
-0. Install necessary modules with `pip`:
+0. Create virtual environment and install necessary modules with `pip`:
+
+Create venv:
+
+```
+python3 -m venv .venv
+```
+
+Activate it:
+
+```
+. .venv/bin/activate
+```
 
 ```
 pip install -r requirements-dev.txt

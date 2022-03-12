@@ -47,7 +47,7 @@ python3 ./app/process_images.py --size 256 --set test
 
 We choose 256x256 px, but that can be changed.
 
-3. Run training script
+2. Run training script
 
 ```
 train_model.py --model <model>
@@ -62,7 +62,7 @@ python3 ./app/train_model.py --model <model>  > ./logs/<log_file> &
 Where <model> could be either a simple `cnn` or `resnet18` loaded from `torchvision`
 
 
-4. Test model
+3. Test model
 
 Run `test_model.py` to test the model in `train`, `val` or `test` sets
 
@@ -70,7 +70,7 @@ Run `test_model.py` to test the model in `train`, `val` or `test` sets
 python3 ./app/test_model.py --model <model> --set <set>
 ```
 
-5. Inference
+4. Inference
 
 Make predictions on random images from `test` set using `infer.py` script.
 
@@ -108,4 +108,14 @@ heroku git:remote -a animal_classifier01
 
 ```
 git push heroku main
+```
+
+## Create front-end with ReactJS
+
+1. Create react app
+
+With `node` and `npm` installed:
+
+```
+npx create-react-app whichisit
 ```

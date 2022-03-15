@@ -14,14 +14,10 @@ import argparse
 # Third-party modules
 import requests
 
-# Heroku URL
-# https://animal-classifier01.herokuapp.com/infer
-
-
 
 def test_endpoint(server):
     if server == 'local':
-        url = 'http://0.0.0.0:5000'
+        url = 'http://127.0.0.1:5175'
     elif server == 'heroku':
         url = 'https://animal-classifier01.herokuapp.com'
 

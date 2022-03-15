@@ -7,6 +7,8 @@ We tested as models simple CNN and a resnet18, best results so far obtained with
 ![Loss and accuracy](https://github.com/maxibove13/classifier_01/blob/main/figures/loss_acc_evol.png?raw=true)
 ## Test deployed API:
 
+
+
 Run a POST request to [https://animal-classifier01.herokuapp.com/](https://animal-classifier01.herokuapp.com/) containing an image from the following categories:
 
 categories = ['sheep', 'cat', 'cow', 'butterfly', 'dog', 'squirrel', 'chicken', 'spider', 'elephant', 'horse']
@@ -51,7 +53,7 @@ We choose 256x256 px, but that can be changed.
 
 ```
 train_model.py --model <model>
-````
+```
 
 It is recommended to run the script in the background and throw the prints in a log file, like this:
 
@@ -69,7 +71,6 @@ Run `test_model.py` to test the model in `train`, `val` or `test` sets
 ```
 python3 ./app/test_model.py --model <model> --set <set>
 ```
-
 4. Inference
 
 Make predictions on random images from `test` set using `infer.py` script.
@@ -119,3 +120,14 @@ With `node` and `npm` installed:
 ```
 npx create-react-app whichisit
 ```
+
+## Connect ReactJS with Flask (frontend with backend)
+
+1. Add a line in `package.json` in `client` root directory specifying the `proxy`:
+
+```
+"proxy": <server>
+```
+
+Where <server> is the URL that the backend is running on.
+If you are running locally it may be something like: `http://localhost:5000`

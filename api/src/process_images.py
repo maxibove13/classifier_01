@@ -19,10 +19,10 @@ import pandas as pd
 import yaml
 
 # Local modules
-from api.src.utils import create_csv
+from src.utils import create_csv
 
 # read yaml file
-with open('./api/config.yaml') as file:
+with open('config.yaml') as file:
     config = yaml.safe_load(file)
 
 def resize_images(size, set, multiprocess=True):

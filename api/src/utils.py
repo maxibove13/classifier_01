@@ -24,10 +24,10 @@ from skimage import io
 import yaml
 
 # Local modules
-from api.src.models import models
+from src.models import models
 
 # read yaml file
-with open('./api/config.yaml') as file:
+with open('config.yaml') as file:
     config = yaml.safe_load(file)
 
 categories = ['sheep', 'cat', 'cow', 'butterfly', 'dog', 'squirrel', 'chicken', 'spider', 'elephant', 'horse']

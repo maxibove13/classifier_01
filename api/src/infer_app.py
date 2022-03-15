@@ -19,11 +19,11 @@ import yaml
 from PIL import Image
 
 # Local modules
-from api.src.process_images import resize_image
-from api.src.utils import load_checkpoint, test_transform, initialize_model
+from src.process_images import resize_image
+from src.utils import load_checkpoint, test_transform, initialize_model
 
 # read yaml file
-with open('./api/config.yaml') as file:
+with open('config.yaml') as file:
     config = yaml.safe_load(file)
 
 # device
@@ -35,7 +35,7 @@ optimizer = torch.optim.SGD(model.parameters(), lr=config['train']['learning_rat
 # Load model
 print("loading model")
 load_checkpoint(
-        os.path.join('api', config['models']['rootdir'], config['models']['name']),
+        os.path.join(config['models']['rootdir'], config['models']['name']),
         model,
         optimizer,
         config['train']['learning_rate'],

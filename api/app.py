@@ -13,20 +13,27 @@ import random
 
 # Third-party model
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 
 # Local modules
-from api.src.infer_app import transform_image, get_prediction
-from api.src.utils import categories
+from src.infer_app import transform_image, get_prediction
+from src.utils import categories
 
 # Instance of Flask class.
-app = Flask(__name__, static_url_path='', static_folder='') # static_url_path points to the build directory of our react project
+app = Flask(__name__)
+
+# In order to make a fetch request we have to use CORS that is an HTTP-header based mechanism that allows a server
+# to indicate any origins other than its own from which the browser should permit loading resources.
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 allowed_extensions = {'png', 'jpg', 'jpeg'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
 
-# Create endpoint to infer data
+# # Create endpoint to infer data
 @app.route('/infer', methods=["POST"])
+@cross_origin()
 def infer():
     if request.method == 'POST':
         file = request.files.get('file')
@@ -38,7 +45,7 @@ def infer():
     try:
         # Load image
         img_bytes = file.read()
-        # Transform iamge to tensor
+        # Transform image to tensor
         tensor = transform_image(img_bytes, 256)
         # Make prediction
         prediction = get_prediction(tensor)
@@ -47,6 +54,11 @@ def infer():
         return jsonify(data)
     except:
         return jsonify({'error': 'prediction error'})
+
+
+@app.route('/members', methods=["GET"])
+def test():
+   return {"data": ["data1", "data2", "data3"]}
 
 if __name__ == "__main__":
     port = 5175

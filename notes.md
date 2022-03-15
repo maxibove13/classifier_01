@@ -17,6 +17,10 @@
 - Create a react app without backend, just the home and make a button to infer
 
 - Different hierarchies of scripts and modules
+
+- Read clean code. SOLID principles.
+
+- convert utils to a subfolder, and each function goes in one file.
 ### Issues
 
 

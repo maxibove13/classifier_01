@@ -1,6 +1,7 @@
 -f https://download.pytorch.org/whl/torch_stable.html
 albumentations
 flask
+flask-cors
 gunicorn
 split-folders
 torch==1.11.0+cpu

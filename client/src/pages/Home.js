@@ -19,7 +19,10 @@ export const Home = () => {
         // Make a POST request to API
         fetch(`${process.env.REACT_APP_API}`, {
             method: "POST",
-            // headers: {"Access-Control-Allow-Origin": "*"},
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json"
+            },
             body: image_data
         })
         // Get response

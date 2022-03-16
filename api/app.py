@@ -25,7 +25,7 @@ app = Flask(__name__)
 # In order to make a fetch request we have to use CORS that is an HTTP-header based mechanism that allows a server
 # to indicate any origins other than its own from which the browser should permit loading resources.
 cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
+# app.config['CORS_HEADERS'] = 'Content-Type'
 
 allowed_extensions = {'png', 'jpg', 'jpeg'}
 def allowed_file(filename):

@@ -29,7 +29,7 @@ from process_images import resize_image
 from utils import initialize_model, load_checkpoint, test_transform, categories
 
 # read yaml file
-with open('./api/config.yaml') as file:
+with open('config.yaml') as file:
     config = yaml.safe_load(file)
 
 def test_model(model_name, set):
@@ -56,7 +56,7 @@ def test_model(model_name, set):
     optimizer = torch.optim.SGD(model.parameters(), lr=config['train']['learning_rate'],
                     momentum=0.9, weight_decay=5e-4)
     # Load checkpoint
-    print("Loading config['models']['name'] checkpoint")
+    print(f"Loading {config['models']['name']} checkpoint")
     load_checkpoint(
         os.path.join(config['models']['rootdir'], config['models']['name']),
         model,
@@ -86,11 +86,10 @@ def test_model(model_name, set):
                 print(f"{categories[int(predictions.cpu())]} predicted correctly")
                 num_correct += 1
             else:
-                print("ALERT !!!")
                 print(f"{categories[int(im[-5])]} predicted incorrectly")
             num_samples += predictions.size(0)
     # Print accuracy
-    print(float(num_correct)/float(num_samples))
+    print(f"{set} Accuracy: {float(num_correct)/float(num_samples)*100:.2f}%")
 
 
 if __name__ == "__main__":

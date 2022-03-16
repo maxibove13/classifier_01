@@ -11,7 +11,7 @@ categories = ['sheep', 'cat', 'cow', 'butterfly', 'dog', 'squirrel', 'chicken', 
 
 We tested as models simple CNN and a resnet18, best results so far obtained with [resnet18](https://pytorch.org/vision/main/generated/torchvision.models.resnet18.html)
 
-![Loss and accuracy](https://github.com/maxibove13/classifier_01/blob/main/api/figures/loss_acc_evol.png?raw=true)
+![Loss and accuracy](https://github.com/maxibove13/classifier_01/blob/main/api/figures/loss_acc_evol_resnet18.png?raw=true)
 
 ## Training instructions
 
@@ -37,32 +37,47 @@ We tested as models simple CNN and a resnet18, best results so far obtained with
     pip install -r requirements-dev.txt
     ```
 
-2. Run `split_data.py` to split the processed dataset in 80% for training, 10% for validation and 10% for final testing. You can change the ratios as you wish.
+    v. Download [Animals-10](https://www.kaggle.com/alessiocorrado99/animals10) dataset inside `data` folder
+
+    vi. Unzip it
 
     ```
-    python3 ./app/split_data.py --ratio 0.8 0.1 0.1
+    unzip archive.zip
+    ```
+
+    vii. Run script to rename the categories to english
+
+    ```
+    ../src/rename_classes.sh
+    ```
+
+
+2. Run `split_data.py` in root directory to split the processed dataset in 80% for training, 10% for validation and 10% for final testing. You can change the ratios as you wish.
+
+    ```
+    python3 ./training/src/split_data.py --ratio 0.8 0.1 0.1
     ```
 
 3. Run `process_images.py` in order to resize and crop raw images (in order for them to be of the same square size) and generate csv file with image filename and associated label (animal type)
 
     ```
-    python3 ./app/process_images.py --size 256 --set train
-    python3 ./app/process_images.py --size 256 --set val
-    python3 ./app/process_images.py --size 256 --set test
+    python3 ./training/src/process_images.py --size 256 --set train
+    python3 ./training/src/process_images.py --size 256 --set val
+    python3 ./training/src/process_images.py --size 256 --set test
     ```
 
-    We choose 256x256 px, but that can be changed.
+    We choose 256x256 px by default, but that can be changed.
 
 4. Run training script
 
     ```
-    train_model.py --model <model>
+    python3 ./training/src/train_model.py --model <model>
     ```
 
     It is recommended to run the script in the background and throw the prints in a log file, like this:
 
     ```
-    python3 ./app/train_model.py --model <model>  > ./logs/<log_file> &
+    python3 ./training/src/train_model.py --model <model>  > ./logs/<log_file> &
     ```
 
     Where <model> could be either a simple `cnn` or `resnet18` loaded from `torchvision`
@@ -73,7 +88,7 @@ We tested as models simple CNN and a resnet18, best results so far obtained with
     Run `test_model.py` to test the model in `train`, `val` or `test` sets
 
     ```
-    python3 ./app/test_model.py --model <model> --set <set>
+    python3 ./training/src/test_model.py --model <model> --set <set>
     ```
 6. Inference
 

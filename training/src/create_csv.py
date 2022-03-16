@@ -9,6 +9,7 @@ __status__ = "Development"
 __date__ = "03/22"
 
 # Built-in modules
+import argparse
 import os
 import multiprocessing
 
@@ -19,11 +20,11 @@ import pandas as pd
 import yaml
 
 # read yaml file
-with open('./api/config.yaml') as file:
+with open('config.yaml') as file:
     config = yaml.safe_load(file)
 
-def create_csv():
-    processed_data_dir = os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'])
+def create_csv(set):
+    processed_data_dir = os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'], set)
     images = os.listdir(os.path.join(processed_data_dir, 'images'))
 
     with open(os.path.join(processed_data_dir, 'annotations.csv'), 'w', newline='') as f:
@@ -34,4 +35,8 @@ def create_csv():
 
 
 if __name__ == "__main__":
-    create_csv()
+    # Initialize Argument Parser
+    parser = argparse.ArgumentParser()
+    # Add arguments we want to parse
+    parser.add_argument("--set", type=str)
+    create_csv(args.set)

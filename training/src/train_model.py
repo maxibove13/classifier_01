@@ -25,10 +25,10 @@ import pandas as pd
 import yaml
 
 # Local modules
-from utils import ImageDataset, get_mean_std, initialize_model, categories
+from utils import ImageDataset, get_mean_std, initialize_model, categories, load_checkpoint
 
 # read yaml file
-with open('./api/config.yaml') as file:
+with open('config.yaml') as file:
     config = yaml.safe_load(file)
 
 learning_rate = config['train']['learning_rate']
@@ -76,6 +76,7 @@ def train_model(model_name, learning_rate, batch_size, num_epochs, num_workers):
         transform = trans
         )
 
+    # Subsampling
     test_indices = list(range(len(val_dataset)))
     np.random.shuffle(test_indices)
     test_idx = test_indices[:]
@@ -106,10 +107,19 @@ def train_model(model_name, learning_rate, batch_size, num_epochs, num_workers):
 
     # Loss and optimizer
     criterion = nn.CrossEntropyLoss()
-    # optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-    # Stochastic Gradient Descent
     optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate,
                       momentum=0.9, weight_decay=5e-4)
+
+    # Load model's checkpoint
+    if config['models']['load']:
+        print(f"Loading {config['models']['name']} checkpoint")
+        load_checkpoint(
+            os.path.join(config['models']['rootdir'], config['models']['name']),
+            model,
+            optimizer,
+            config['train']['learning_rate'],
+            device
+        )
 
     # Training loop
     print(f"Starting training: \n")

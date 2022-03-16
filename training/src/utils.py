@@ -24,10 +24,10 @@ from skimage import io
 import yaml
 
 # Local modules
-from api.src.models import models
+from models import models
 
 # read yaml file
-with open('./api/config.yaml') as file:
+with open('config.yaml') as file:
     config = yaml.safe_load(file)
 
 categories = ['sheep', 'cat', 'cow', 'butterfly', 'dog', 'squirrel', 'chicken', 'spider', 'elephant', 'horse']
@@ -57,16 +57,6 @@ class ImageDataset(Dataset):
             image = self.transform(image)
 
         return (image, y_label)
-
-def create_csv(set):
-    processed_data_dir = os.path.join(config['data']['rootdir'], 'processed', config['data']['dataset'], set)
-    images = os.listdir(os.path.join(processed_data_dir, 'images'))
-
-    with open(os.path.join(processed_data_dir, 'annotations.csv'), 'w', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerow(['filename', 'category'])
-        for im in images:
-            writer.writerow([im , im[-5]])
 
 def get_mean_std(dataset, batch_size, num_workers):
     # Load data

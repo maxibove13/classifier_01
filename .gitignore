@@ -3,7 +3,7 @@ api/.venv_api
 training/.venv_train
 
 #ignore data
-training/data
+training/data/*
 
 # Ignore test
 test.py
@@ -14,7 +14,7 @@ test.py
 training/logs
 
 # Ignore models
-# models
+training/models/resnet18_new.pth
 
 # Ignore figures
 # figures

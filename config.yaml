@@ -1,0 +1,22 @@
+data:
+  rootdir: training/data
+  dataset: kaggle_animals
+  img_channels: 3
+
+# Pretrained models
+models:
+  load: False
+  save: True
+  rootdir: training/models
+  name: resnet18_new.pth
+
+# Training hyperparameters
+train:
+  device: 'cuda:1'
+  learning_rate: 1.0e-2
+  num_epochs: 50
+  batch_size: 64
+  num_workers: 4 # number of processes that gen batches in parallel
+
+figures:
+  dir: training/figures

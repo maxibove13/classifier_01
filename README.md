@@ -13,7 +13,7 @@ We tested as models simple CNN and a resnet18, best results so far obtained with
 
 ### Current model performance on test data: 85.74%
 
-![Loss and accuracy](https://github.com/maxibove13/classifier_01/blob/main/api/figures/loss_acc_evol_resnet18.png?raw=true)
+![Loss and accuracy](https://github.com/maxibove13/classifier_01/blob/main/training/figures/loss_acc_evol_resnet18.png?raw=true)
 
 ## Training instructions
 

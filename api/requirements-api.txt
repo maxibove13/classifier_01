@@ -1,0 +1,12 @@
+albumentations
+flask
+flask-cors
+gunicorn
+split-folders
+torch==1.11.0+cpu
+torchvision==0.12.0+cpu
+pandas
+python-dotenv
+pyyaml
+requests
+scikit-learn

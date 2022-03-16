@@ -17,17 +17,21 @@ We tested as models simple CNN and a resnet18, best results so far obtained with
 
 1. Create virtual environment and install necessary modules with `pip`:
 
-    Create venv:
+    i. Go to `training/` directory
+
+    ii. Create venv:
 
     ```
-    python3 -m venv .venv
+    python3 -m venv .venv_train
     ```
 
-    Activate it:
+    iii. Activate it:
 
     ```
     . .venv/bin/activate
     ```
+
+    iv. Install dependencies
 
     ```
     pip install -r requirements-dev.txt

@@ -1,8 +1,9 @@
 # Ignore venv
 api/.venv_api
+training/.venv_train
 
 #ignore data
-data
+training/data
 
 # Ignore test
 test.py
@@ -10,7 +11,7 @@ test.py
 *.swp
 
 # ignore logs
-logs
+training/logs
 
 # Ignore models
 # models

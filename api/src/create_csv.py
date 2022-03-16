@@ -19,7 +19,7 @@ import pandas as pd
 import yaml
 
 # read yaml file
-with open('config.yaml') as file:
+with open('./api/config.yaml') as file:
     config = yaml.safe_load(file)
 
 def create_csv():

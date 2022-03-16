@@ -17,7 +17,7 @@ export const Home = () => {
         // Append input to FormData object
         image_data.append('file', input.files[0])
         // Make a POST request to API
-        fetch("https://animal-classifier01.herokuapp.com/infer", {
+        fetch("http://0.0.0.0:5000/infer", {
             method: "POST",
             // headers: {"Access-Control-Allow-Origin": "*"},
             body: image_data

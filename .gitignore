@@ -21,8 +21,8 @@ figures
 # Ignore notebooks
 *.ipynb
 
-# Ignore config.yaml
-# config.yaml
+# Ignore ./api/config.yaml
+# ./api/config.yaml
 
 
 # Except loss and accuracy figure

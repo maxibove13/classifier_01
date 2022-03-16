@@ -17,7 +17,7 @@ import requests
 
 def test_endpoint(server):
     if server == 'local':
-        url = 'http://127.0.0.1:5175'
+        url = 'http://0.0.0.0:5000'
     elif server == 'heroku':
         url = 'https://animal-classifier01.herokuapp.com'
 

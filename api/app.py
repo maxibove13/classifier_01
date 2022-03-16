@@ -16,8 +16,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 
 # Local modules
-from src.infer_app import transform_image, get_prediction
-from src.utils import categories
+from api.src.infer_app import transform_image, get_prediction
+from api.src.utils import categories
 
 # Instance of Flask class.
 app = Flask(__name__)

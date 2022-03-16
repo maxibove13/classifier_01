@@ -28,7 +28,7 @@ import yaml
 from utils import ImageDataset, get_mean_std, initialize_model, categories
 
 # read yaml file
-with open('config.yaml') as file:
+with open('./api/config.yaml') as file:
     config = yaml.safe_load(file)
 
 learning_rate = config['train']['learning_rate']

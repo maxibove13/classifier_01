@@ -29,7 +29,7 @@ from process_images import resize_image
 from utils import initialize_model, load_checkpoint, test_transform
 
 # read yaml file
-with open('config.yaml') as file:
+with open('./api/config.yaml') as file:
     config = yaml.safe_load(file)
 
 def infer(model_name, num_samples):

@@ -16,7 +16,7 @@ logs
 # models
 
 # Ignore figures
-figures
+# figures
 
 # Ignore notebooks
 *.ipynb
@@ -26,5 +26,4 @@ figures
 
 
 # Except loss and accuracy figure
-!figures/loss_acc_evol.png
 !test.py

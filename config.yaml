@@ -8,7 +8,7 @@ models:
   load: False
   save: True
   rootdir: training/models
-  name: resnet18_new.pth
+  name: resnet18.pth
 
 # Training hyperparameters
 train:

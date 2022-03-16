@@ -17,7 +17,7 @@ from flask_cors import CORS, cross_origin
 
 # Local modules
 from api.src.infer_app import transform_image, get_prediction
-from api.src.utils import categories
+from training.src.utils import categories
 
 # Instance of Flask class.
 app = Flask(__name__)
@@ -40,23 +40,18 @@ def infer():
         if not allowed_file(file.filename):
             return jsonify({'error': 'format not supported'})
     # Make inference on image
-    try:
-        # Load image
-        img_bytes = file.read()
-        # Transform image to tensor
-        tensor = transform_image(img_bytes, 256)
-        # Make prediction
-        prediction = get_prediction(tensor)
-        # Return json data
-        data = {'prediction': prediction.item(), 'class_name': categories[prediction.item()]}
-        return jsonify(data)
-    except:
-        return jsonify({'error': 'prediction error'})
-
-
-@app.route('/members', methods=["GET"])
-def test():
-   return {"data": ["data1", "data2", "data3"]}
+    # try:
+    # Load image
+    img_bytes = file.read()
+    # Transform image to tensor
+    tensor = transform_image(img_bytes, 256)
+    # Make prediction
+    prediction = get_prediction(tensor)
+    # Return json data
+    data = {'prediction': prediction.item(), 'class_name': categories[prediction.item()]}
+    return jsonify(data)
+    # except:
+        # return jsonify({'error': 'prediction error'})
 
 if __name__ == "__main__":
     port = 5175

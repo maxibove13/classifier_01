@@ -11,6 +11,7 @@ __date__ = "03/22"
 # Built-in modules
 import io
 import os
+import sys
 
 # Third-party modules
 import numpy as np
@@ -18,31 +19,15 @@ import torch
 import yaml
 from PIL import Image
 
+sys.path.append('./training/src')
+
 # Local modules
-from api.src.process_images import resize_image
-from api.src.utils import load_checkpoint, test_transform, initialize_model
+from training.src.process_images import resize_image
+from training.src.utils import load_checkpoint, test_transform, initialize_model
 
 # read yaml file
-with open('./api/config.yaml') as file:
+with open('config.yaml') as file:
     config = yaml.safe_load(file)
-
-# device
-device = 'cpu'
-
-# Initialize model
-model = initialize_model("resnet18", torch.device(device))
-optimizer = torch.optim.SGD(model.parameters(), lr=config['train']['learning_rate'], momentum=0.9, weight_decay=5e-4)
-# Load model
-print("loading model")
-load_checkpoint(
-        os.path.join('api',config['models']['rootdir'], config['models']['name']),
-        model,
-        optimizer,
-        config['train']['learning_rate'],
-        device
-    )
-# Put model in evaluation mode
-model.eval()
 
 def transform_image(image, size):
     image = Image.open(io.BytesIO(image))
@@ -60,7 +45,29 @@ def transform_image(image, size):
 
 
 def get_prediction(image_tensor):
+    # device
+    device = 'cpu'
+
+    # Initialize model
+    model = initialize_model("resnet18", torch.device(device))
+    optimizer = torch.optim.SGD(model.parameters(), lr=config['train']['learning_rate'], momentum=0.9, weight_decay=5e-4)
+
+    # Load model
+    print("loading model")
+    load_checkpoint(
+            os.path.join(config['models']['rootdir'], config['models']['name']),
+            model,
+            optimizer,
+            config['train']['learning_rate'],
+            device
+        )
+
+    # Put model in evaluation mode
+    model.eval()
+
+    # Apply model to image
     outputs = model(image_tensor.to(device))
     _, predictions = torch.max(outputs.data, 1)
+
     return predictions
 

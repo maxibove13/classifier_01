@@ -21,7 +21,7 @@ def test_endpoint(server):
     elif server == 'heroku':
         url = 'https://animal-classifier01.herokuapp.com'
 
-    resp = requests.post(url + '/infer', files={'file': open('./data/download.jpeg', 'rb')})
+    resp = requests.post(url + '/infer', files={'file': open('./api/samples/cow.jpg', 'rb')})
 
     print(resp.text)
 

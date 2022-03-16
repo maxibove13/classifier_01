@@ -16,8 +16,8 @@ training/logs
 # Ignore models
 training/models/resnet18_new.pth
 
-# Ignore figures
-# figures
+# Ignore data
+api/samples
 
 # Ignore notebooks
 *.ipynb

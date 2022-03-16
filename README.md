@@ -28,7 +28,7 @@ We tested as models simple CNN and a resnet18, best results so far obtained with
     iii. Activate it:
 
     ```
-    . .venv/bin/activate
+    . .venv_train/bin/activate
     ```
 
     iv. Install dependencies

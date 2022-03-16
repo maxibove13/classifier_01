@@ -5,7 +5,7 @@ export const Home = () => {
     
     const [image, setImage] = useState([])
     const [prediction, setPrediction] = useState('')
-    const [loading, setLoading] = useState(false)
+    // const [loading, setLoading] = useState(false)
 
     const postImage = () => {
         // Set loading to true
@@ -25,7 +25,7 @@ export const Home = () => {
         .then(res => res.json())
         .then(data => {
             // Update prediction 
-            setLoading(false)
+            // setLoading(false)
             setPrediction(data.class_name)
         })
     }
@@ -42,7 +42,7 @@ export const Home = () => {
 
         <button onClick={postImage} > Predict animal </button>
 
-        <img src={image} style={{width: '300px'}} />
+        <img src={image} alt="animal" style={{width: '300px'}} />
 
         {/* {loading ? (<h3>Computing...</h3>) : (<h3>It's a {prediction}!</h3>)} */}
         <h1>{prediction}</h1>

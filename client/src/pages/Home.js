@@ -9,7 +9,7 @@ export const Home = () => {
 
     const postImage = () => {
         // Set loading to true
-        setLoading(true)
+        // setLoading(true)
         // Get recent input (uploaded image)
         let input = document.querySelector('input[type="file"]')
         // Define a FormData instance 

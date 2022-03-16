@@ -11,7 +11,7 @@ categories = ['sheep', 'cat', 'cow', 'butterfly', 'dog', 'squirrel', 'chicken', 
 
 We tested as models simple CNN and a resnet18, best results so far obtained with [resnet18](https://pytorch.org/vision/main/generated/torchvision.models.resnet18.html)
 
-![Loss and accuracy](https://github.com/maxibove13/classifier_01/blob/main/figures/loss_acc_evol.png?raw=true)
+![Loss and accuracy](https://github.com/maxibove13/classifier_01/blob/main/api/figures/loss_acc_evol.png?raw=true)
 
 ## Training instructions
 
